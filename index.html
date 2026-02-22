@@ -78,7 +78,7 @@ button {
 }
 </style>
 </head>
-
+    
 <body>
 
 <header>
@@ -89,6 +89,12 @@ button {
     </div>
 </header>
 
+<!-- DETAIL PRODUK -->
+<div id="detailSection" class="section">
+    <button onclick="showSection('productSection')">⬅ Kembali</button>
+    <div id="detailContent"></div>
+</div>
+    
 <!-- PRODUK -->
 <div id="productSection" class="section">
     <h2>Produk</h2>
@@ -122,12 +128,76 @@ button {
 </div>
 
 <script>
+function changeTempQty(change){
+    tempQty += change;
+    if(tempQty < 1) tempQty = 1;
+    document.getElementById("tempQty").innerText = tempQty;
+}
 
+function addFromDetail(id){
+
+    let product = products.find(p=>p.id===id);
+
+    if(!cart[id]){
+        cart[id] = {...product, qty:0};
+    }
+
+    cart[id].qty += tempQty;
+
+    updateCart();
+    showSection("productSection");
+}
+    
+let tempQty = 1;
+
+function showDetail(id){
+
+    let product = products.find(p=>p.id===id);
+    tempQty = 1;
+
+    let html = `
+        <img src="${product.img}" style="width:100%;max-width:300px;">
+        <h2>${product.name}</h2>
+        <p>${product.desc}</p>
+        <h3>Rp ${product.price}</h3>
+
+        <div style="display:flex;gap:10px;align-items:center;margin:10px 0;">
+            <button onclick="changeTempQty(-1)">-</button>
+            <span id="tempQty">${tempQty}</span>
+            <button onclick="changeTempQty(1)">+</button>
+        </div>
+
+        <button onclick="addFromDetail(${product.id})">
+            Masukkan ke Keranjang
+        </button>
+    `;
+
+    document.getElementById("detailContent").innerHTML = html;
+    showSection("detailSection");
+}   
+    
 let products = [
-    {id:1,name:"Paracetamol",price:15000,img:"https://via.placeholder.com/150",category:"Demam"},
-    {id:2,name:"Cetirizine",price:25000,img:"https://via.placeholder.com/150",category:"Alergi"},
-    {id:3,name:"Promaag",price:10000,img:"https://via.placeholder.com/150",category:"Maag"},
-    {id:4,name:"Omeprazole",price:20000,img:"https://via.placeholder.com/150",category:"Maag"}
+    {
+        id:1,
+        name:"Paracetamol",
+        price:15000,
+        img:"https://via.placeholder.com/150",
+        desc:"Obat untuk meredakan demam dan nyeri ringan."
+    },
+    {
+        id:2,
+        name:"Cetirizine",
+        price:25000,
+        img:"https://via.placeholder.com/150",
+        desc:"Mengurangi dampak alergi"
+    },
+    {
+        id:3,
+        name:"Omeprazole",
+        price:10000,
+        img:"https://via.placeholder.com/150",
+        desc:"Mengatasi asam lambung."
+    }
 ];
 
 let cart = {};
@@ -158,6 +228,13 @@ function renderProducts(){
             </div>
         </div>
         `;
+        container.innerHTML += `
+        <div class="product" onclick="showDetail(${p.id})" style="cursor:pointer;">
+        <img src="${p.img}">
+    <h4>${p.name}</h4>
+    <p>Rp ${p.price}</p>
+</div>
+`;
     });
 }
 
