@@ -148,34 +148,6 @@ function addFromDetail(id){
     showSection("productSection");
 }
     
-let tempQty = 1;
-
-function showDetail(id){
-
-    let product = products.find(p=>p.id===id);
-    tempQty = 1;
-
-    let html = `
-        <img src="${product.img}" style="width:100%;max-width:300px;">
-        <h2>${product.name}</h2>
-        <p>${product.desc}</p>
-        <h3>Rp ${product.price}</h3>
-
-        <div style="display:flex;gap:10px;align-items:center;margin:10px 0;">
-            <button onclick="changeTempQty(-1)">-</button>
-            <span id="tempQty">${tempQty}</span>
-            <button onclick="changeTempQty(1)">+</button>
-        </div>
-
-        <button onclick="addFromDetail(${product.id})">
-            Masukkan ke Keranjang
-        </button>
-    `;
-
-    document.getElementById("detailContent").innerHTML = html;
-    showSection("detailSection");
-}   
-    
 let products = [
     {
         id:1,
@@ -194,6 +166,13 @@ let products = [
     {
         id:3,
         name:"Omeprazole",
+        price:10000,
+        img:"https://via.placeholder.com/150",
+        desc:"Mengatasi asam lambung."
+    },
+    {
+        id:3,
+        name:"Promaag",
         price:10000,
         img:"https://via.placeholder.com/150",
         desc:"Mengatasi asam lambung."
