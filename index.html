@@ -3,10 +3,7 @@
 <head>
     <title>Toko Eksperimen</title>
     <style>
-        body {
-            font-family: Arial;
-            margin: 20px;
-        }
+        body { font-family: Arial; margin: 20px; }
 
         .products {
             display: grid;
@@ -100,12 +97,10 @@ function increaseQty(id) {
 function decreaseQty(id) {
     if (cart[id]) {
         cart[id].qty--;
-
         if (cart[id].qty <= 0) {
             delete cart[id];
         }
     }
-
     updateCart();
 }
 
@@ -120,10 +115,7 @@ function updateCart() {
         total += item.price * item.qty;
 
         cartContainer.innerHTML += `
-            <p>
-                ${item.name} x ${item.qty} 
-                = Rp ${item.price * item.qty}
-            </p>
+            <p>${item.name} x ${item.qty} = Rp ${item.price * item.qty}</p>
         `;
     });
 
@@ -137,89 +129,13 @@ function checkout() {
         return;
     }
 
-    alert("Pembayaran berhasil! Terima kasih 😄");
+    alert("Pembayaran berhasil 😄");
     cart = {};
     updateCart();
 }
 
 renderProducts();
 
-</script>
-
-</body>
-</html>  <!-- AKSESORIS -->
-  <div class="product aksesoris">
-    <h4>Topi</h4>
-    <p>Rp80000</p>
-    <button onclick="addToCart('Topi',80000)">Tambah</button>
-  </div>
-
-  <div class="product aksesoris">
-    <h4>Jam Tangan</h4>
-    <p>Rp250000</p>
-    <button onclick="addToCart('Jam Tangan',250000)">Tambah</button>
-  </div>
-
-  <div class="cart-box">
-    <h3>Keranjang</h3>
-    <p>Total Item: <span id="totalItems">0</span></p>
-    <p>Total Harga: Rp <span id="totalPrice">0</span></p>
-    <button onclick="goToCheckout()">Checkout</button>
-  </div>
-
-</div>
-
-<div class="container hidden" id="checkout">
-  <h3>Checkout</h3>
-  <input type="text" id="name" placeholder="Nama">
-  <input type="text" id="address" placeholder="Alamat">
-  <input type="text" id="phone" placeholder="No HP">
-  <button onclick="processPayment()">Bayar Sekarang</button>
-</div>
-
-<div class="container hidden" id="success">
-  <h2>Pembayaran Berhasil 🎉</h2>
-  <p>Total Item Dibeli: <span id="finalItems"></span></p>
-  <p>Total Pembayaran: Rp <span id="finalPrice"></span></p>
-  <p>Terima kasih sudah berpartisipasi.</p>
-</div>
-
-<script>
-
-let cart = [];
-
-function addToCart(name, price) {
-    cart.push({ name, price });
-    updateCart();
-}
-
-function removeFromCart(index) {
-    cart.splice(index, 1); // hapus 1 barang di posisi itu
-    updateCart();
-}
-
-function updateCart() {
-    const cartItems = document.getElementById("cart-items");
-    const totalPrice = document.getElementById("total-price");
-
-    cartItems.innerHTML = "";
-    let total = 0;
-
-    cart.forEach((item, index) => {
-        total += item.price;
-
-        cartItems.innerHTML += `
-            <div style="display:flex; justify-content:space-between; margin:5px 0;">
-                <span>${item.name} - Rp ${item.price}</span>
-                <button onclick="removeFromCart(${index})">
-                    Hapus
-                </button>
-            </div>
-        `;
-    });
-
-    totalPrice.innerText = total;
-}
 </script>
 
 </body>
