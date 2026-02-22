@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>BelanjaKu</title>
+
+<style>
+body{
+  font-family: Arial;
+  margin:0;
+  padding:0;
+  background:#f4f4f4;
+}
+
+header{
+  background:#ff6b6b;
+  color:white;
+  text-align:center;
+  padding:15px;
+}
+
+.container{
+  padding:20px;
+}
+
+button{
+  background:#ff6b6b;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  margin:5px;
+  cursor:pointer;
+  border-radius:5px;
+}
+
+button:hover{
+  opacity:0.8;
+}
+
+.product{
+  background:white;
+  padding:15px;
+  margin:10px;
+  width:220px;
+  display:inline-block;
+  border-radius:8px;
+}
+
+.cart-box{
+  background:white;
+  padding:15px;
+  margin-top:20px;
+  border-radius:8px;
+}
+
+.hidden{
+  display:none;
+}
+
+input{
+  width:100%;
+  padding:8px;
+  margin:8px 0;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h2>BelanjaKu</h2>
+  <p>Simulasi Pembelian</p>
+</header>
+
+<div class="container" id="shop">
+
+  <h3>Kategori</h3>
+  <button onclick="showCategory('all')">Semua</button>
+  <button onclick="showCategory('baju')">Baju</button>
+  <button onclick="showCategory('celana')">Celana</button>
+  <button onclick="showCategory('aksesoris')">Aksesoris</button>
+
+  <h3>Produk</h3>
+
+  <!-- BAJU -->
+  <div class="product baju">
+    <h4>Kaos Polos</h4>
+    <p>Rp100000</p>
+    <button onclick="addToCart('Kaos Polos',100000)">Tambah</button>
+  </div>
+
+  <div class="product baju">
+    <h4>Kemeja Casual</h4>
+    <p>Rp150000</p>
+    <button onclick="addToCart('Kemeja Casual',150000)">Tambah</button>
+  </div>
+
+  <!-- CELANA -->
+  <div class="product celana">
+    <h4>Celana Jeans</h4>
+    <p>Rp200000</p>
+    <button onclick="addToCart('Celana Jeans',200000)">Tambah</button>
+  </div>
+
+  <div class="product celana">
+    <h4>Celana Pendek</h4>
+    <p>Rp120000</p>
+    <button onclick="addToCart('Celana Pendek',120000)">Tambah</button>
+  </div>
+
+  <!-- AKSESORIS -->
+  <div class="product aksesoris">
+    <h4>Topi</h4>
+    <p>Rp80000</p>
+    <button onclick="addToCart('Topi',80000)">Tambah</button>
+  </div>
+
+  <div class="product aksesoris">
+    <h4>Jam Tangan</h4>
+    <p>Rp250000</p>
+    <button onclick="addToCart('Jam Tangan',250000)">Tambah</button>
+  </div>
+
+  <div class="cart-box">
+    <h3>Keranjang</h3>
+    <p>Total Item: <span id="totalItems">0</span></p>
+    <p>Total Harga: Rp <span id="totalPrice">0</span></p>
+    <button onclick="goToCheckout()">Checkout</button>
+  </div>
+
+</div>
+
+<div class="container hidden" id="checkout">
+  <h3>Checkout</h3>
+  <input type="text" id="name" placeholder="Nama">
+  <input type="text" id="address" placeholder="Alamat">
+  <input type="text" id="phone" placeholder="No HP">
+  <button onclick="processPayment()">Bayar Sekarang</button>
+</div>
+
+<div class="container hidden" id="success">
+  <h2>Pembayaran Berhasil 🎉</h2>
+  <p>Total Item Dibeli: <span id="finalItems"></span></p>
+  <p>Total Pembayaran: Rp <span id="finalPrice"></span></p>
+  <p>Terima kasih sudah berpartisipasi.</p>
+</div>
+
+<script>
+
+let cart = [];
+let totalPrice = 0;
+
+function addToCart(name, price){
+  cart.push({name, price});
+  totalPrice += price;
+
+  document.getElementById("totalItems").innerText = cart.length;
+  document.getElementById("totalPrice").innerText = totalPrice;
+}
+
+function goToCheckout(){
+  if(cart.length === 0){
+    alert("Keranjang kosong!");
+    return;
+  }
+
+  document.getElementById("shop").classList.add("hidden");
+  document.getElementById("checkout").classList.remove("hidden");
+}
+
+function processPayment(){
+  document.getElementById("checkout").classList.add("hidden");
+  document.getElementById("success").classList.remove("hidden");
+
+  document.getElementById("finalItems").innerText = cart.length;
+  document.getElementById("finalPrice").innerText = totalPrice;
+}
+
+function showCategory(category){
+
+  let products = document.querySelectorAll(".product");
+
+  products.forEach(function(item){
+
+    if(category === "all"){
+      item.style.display = "inline-block";
+    }
+    else if(item.classList.contains(category)){
+      item.style.display = "inline-block";
+    }
+    else{
+      item.style.display = "none";
+    }
+
+  });
+}
+
+</script>
+
+</body>
+</html>
