@@ -1,114 +1,153 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>BelanjaKu</title>
+    <title>Toko Eksperimen</title>
+    <style>
+        body {
+            font-family: Arial;
+            margin: 20px;
+        }
 
-<style>
-body{
-  font-family: Arial;
-  margin:0;
-  padding:0;
-  background:#f4f4f4;
-}
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
 
-header{
-  background:#ff6b6b;
-  color:white;
-  text-align:center;
-  padding:15px;
-}
+        .product {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 10px;
+        }
 
-.container{
-  padding:20px;
-}
+        .qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-button{
-  background:#ff6b6b;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  margin:5px;
-  cursor:pointer;
-  border-radius:5px;
-}
+        button {
+            padding: 5px 10px;
+            cursor: pointer;
+        }
 
-button:hover{
-  opacity:0.8;
-}
-
-.product{
-  background:white;
-  padding:15px;
-  margin:10px;
-  width:220px;
-  display:inline-block;
-  border-radius:8px;
-}
-
-.cart-box{
-  background:white;
-  padding:15px;
-  margin-top:20px;
-  border-radius:8px;
-}
-
-.hidden{
-  display:none;
-}
-
-input{
-  width:100%;
-  padding:8px;
-  margin:8px 0;
-}
-</style>
+        .cart {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid black;
+        }
+    </style>
 </head>
 
 <body>
 
-<header>
-  <h2>BelanjaKu</h2>
-  <p>Simulasi Pembelian</p>
-</header>
+<h1>Toko Eksperimen</h1>
 
-<div class="container" id="shop">
+<div class="products" id="product-list"></div>
 
-  <h3>Kategori</h3>
-  <button onclick="showCategory('all')">Semua</button>
-  <button onclick="showCategory('baju')">Baju</button>
-  <button onclick="showCategory('celana')">Celana</button>
-  <button onclick="showCategory('aksesoris')">Aksesoris</button>
+<div class="cart">
+    <h2>Keranjang</h2>
+    <div id="cart-items"></div>
+    <h3>Total: Rp <span id="total-price">0</span></h3>
+    <button onclick="checkout()">Checkout</button>
+</div>
 
-  <h3>Produk</h3>
+<script>
 
-  <!-- BAJU -->
-  <div class="product baju">
-    <h4>Kaos Polos</h4>
-    <p>Rp100000</p>
-    <button onclick="addToCart('Kaos Polos',100000)">Tambah</button>
-  </div>
+let products = [
+    { id: 1, name: "Baju", price: 600000, desc: "Baju nyaman dan keren" },
+    { id: 2, name: "Celana", price: 800000, desc: "Celana stylish" },
+    { id: 3, name: "Aksesoris", price: 200000, desc: "Aksesoris kece" }
+];
 
-  <div class="product baju">
-    <h4>Kemeja Casual</h4>
-    <p>Rp150000</p>
-    <button onclick="addToCart('Kemeja Casual',150000)">Tambah</button>
-  </div>
+let cart = {};
 
-  <!-- CELANA -->
-  <div class="product celana">
-    <h4>Celana Jeans</h4>
-    <p>Rp200000</p>
-    <button onclick="addToCart('Celana Jeans',200000)">Tambah</button>
-  </div>
+function renderProducts() {
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
 
-  <div class="product celana">
-    <h4>Celana Pendek</h4>
-    <p>Rp120000</p>
-    <button onclick="addToCart('Celana Pendek',120000)">Tambah</button>
-  </div>
+    products.forEach(product => {
+        let qty = cart[product.id] ? cart[product.id].qty : 0;
 
-  <!-- AKSESORIS -->
+        container.innerHTML += `
+            <div class="product">
+                <h3>${product.name}</h3>
+                <p>${product.desc}</p>
+                <p><b>Rp ${product.price}</b></p>
+
+                <div class="qty-control">
+                    <button onclick="decreaseQty(${product.id})">-</button>
+                    <span>${qty}</span>
+                    <button onclick="increaseQty(${product.id})">+</button>
+                </div>
+            </div>
+        `;
+    });
+}
+
+function increaseQty(id) {
+    let product = products.find(p => p.id === id);
+
+    if (!cart[id]) {
+        cart[id] = { ...product, qty: 0 };
+    }
+
+    cart[id].qty++;
+    updateCart();
+}
+
+function decreaseQty(id) {
+    if (cart[id]) {
+        cart[id].qty--;
+
+        if (cart[id].qty <= 0) {
+            delete cart[id];
+        }
+    }
+
+    updateCart();
+}
+
+function updateCart() {
+    const cartContainer = document.getElementById("cart-items");
+    const totalPrice = document.getElementById("total-price");
+
+    cartContainer.innerHTML = "";
+    let total = 0;
+
+    Object.values(cart).forEach(item => {
+        total += item.price * item.qty;
+
+        cartContainer.innerHTML += `
+            <p>
+                ${item.name} x ${item.qty} 
+                = Rp ${item.price * item.qty}
+            </p>
+        `;
+    });
+
+    totalPrice.innerText = total;
+    renderProducts();
+}
+
+function checkout() {
+    if (Object.keys(cart).length === 0) {
+        alert("Keranjang kosong!");
+        return;
+    }
+
+    alert("Pembayaran berhasil! Terima kasih 😄");
+    cart = {};
+    updateCart();
+}
+
+renderProducts();
+
+</script>
+
+</body>
+</html>  <!-- AKSESORIS -->
   <div class="product aksesoris">
     <h4>Topi</h4>
     <p>Rp80000</p>
