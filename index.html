@@ -1,185 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Toko Eksperimen</title>
-    <style>
-        body { font-family: Arial; margin: 20px; }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apotek Sehat</title>
 
-        .products {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 20px;
-        }
+<style>
+body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
 
-        .product {
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 10px;
-        }
+header {
+    display:flex;
+    justify-content:space-between;
+    padding:15px;
+    background:#2e7d32;
+    color:white;
+}
 
-        .qty-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-        }
+.section { display:none; padding:20px; }
 
-        button {
-            padding: 5px 10px;
-            cursor: pointer;
-        }
+.products {
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+    gap:15px;
+}
 
-        .cart {
-            margin-top: 40px;
-            padding: 20px;
-            border-top: 2px solid black;
-        }
-    </style>
+.product {
+    background:white;
+    border-radius:10px;
+    padding:10px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+}
+
+.product img {
+    width:100%;
+    height:120px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.qty-control {
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    margin-top:10px;
+}
+
+button {
+    padding:5px 10px;
+    cursor:pointer;
+    border:none;
+    border-radius:5px;
+}
+
+.cart-icon {
+    position:relative;
+    cursor:pointer;
+}
+
+.cart-count {
+    position:absolute;
+    top:-8px;
+    right:-8px;
+    background:red;
+    color:white;
+    font-size:12px;
+    padding:2px 6px;
+    border-radius:50%;
+}
+
+.cart-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:white;
+    padding:8px;
+    margin-bottom:8px;
+    border-radius:8px;
+}
+</style>
 </head>
 
 <body>
 
-<h1>Toko Eksperimen</h1>
+<header>
+    <h3>Apotek Sehat</h3>
+    <div class="cart-icon" onclick="showSection('cartSection')">
+        🛒
+        <span class="cart-count" id="cartCount">0</span>
+    </div>
+</header>
 
-<div class="products" id="product-list"></div>
-
-<div class="cart">
-    <h2>Keranjang</h2>
-    <div id="cart-items"></div>
-    <h3>Total: Rp <span id="total-price">0</span></h3>
-
-    <h3>Checkout</h3>
-    <input type="text" id="nama" placeholder="Nama"><br><br>
-    <input type="text" id="alamat" placeholder="Alamat"><br><br>
-    <input type="text" id="nohp" placeholder="No HP"><br><br>
-
-    <button onclick="checkout()">Bayar Sekarang</button>
+<!-- PRODUK -->
+<div id="productSection" class="section">
+    <h2>Produk</h2>
+    <div class="products" id="productList"></div>
 </div>
 
-<div id="receipt" style="margin-top:30px;"></div>
+<!-- KERANJANG -->
+<div id="cartSection" class="section">
+    <h2>Keranjang</h2>
+    <div id="cartItems"></div>
+    <h3>Total: Rp <span id="totalPrice">0</span></h3>
+    <button onclick="showSection('checkoutSection')">Checkout</button>
+</div>
+
+<!-- CHECKOUT -->
+<div id="checkoutSection" class="section">
+    <h2>Data Pembeli</h2>
+    <input id="nama" placeholder="Nama"><br><br>
+    <input id="alamat" placeholder="Alamat"><br><br>
+    <input id="nohp" placeholder="No HP"><br><br>
+    <button onclick="processPayment()">Bayar Sekarang</button>
+</div>
+
+<!-- INVOICE -->
+<div id="invoiceSection" class="section">
+    <h2>🧾 Invoice</h2>
+    <div id="invoiceContent"></div>
+    <button onclick="window.print()">Print</button>
+    <button onclick="showSection('productSection')">Kembali ke Toko</button>
+</div>
 
 <script>
 
 let products = [
-    { id: 1, name: "Baju", price: 600000, desc: "Baju nyaman dan keren" },
-    { id: 2, name: "Celana", price: 800000, desc: "Celana stylish" },
-    { id: 3, name: "Aksesoris", price: 200000, desc: "Aksesoris kece" }
+    {id:1,name:"Paracetamol",price:15000,img:"https://via.placeholder.com/150",category:"Demam"},
+    {id:2,name:"Cetirizine",price:25000,img:"https://via.placeholder.com/150",category:"Alergi"},
+    {id:3,name:"Promaag",price:10000,img:"https://via.placeholder.com/150",category:"Maag"},
+    {id:4,name:"Omeprazole",price:20000,img:"https://via.placeholder.com/150",category:"Maag"}
 ];
 
 let cart = {};
 
-function renderProducts() {
-    const container = document.getElementById("product-list");
-    container.innerHTML = "";
+function showSection(sectionId){
+    document.querySelectorAll(".section").forEach(sec=>{
+        sec.style.display="none";
+    });
+    document.getElementById(sectionId).style.display="block";
+}
 
-    products.forEach(product => {
-        let qty = cart[product.id] ? cart[product.id].qty : 0;
+function renderProducts(){
+    let container = document.getElementById("productList");
+    container.innerHTML="";
+
+    products.forEach(p=>{
+        let qty = cart[p.id]?.qty || 0;
 
         container.innerHTML += `
-            <div class="product">
-                <h3>${product.name}</h3>
-                <p>${product.desc}</p>
-                <p><b>Rp ${product.price}</b></p>
-
-                <div class="qty-control">
-                    <button onclick="decreaseQty(${product.id})">-</button>
-                    <span>${qty}</span>
-                    <button onclick="increaseQty(${product.id})">+</button>
-                </div>
+        <div class="product">
+            <img src="${p.img}">
+            <h4>${p.name}</h4>
+            <p>Rp ${p.price}</p>
+            <div class="qty-control">
+                <button onclick="changeQty(${p.id},-1)">-</button>
+                <span>${qty}</span>
+                <button onclick="changeQty(${p.id},1)">+</button>
             </div>
+        </div>
         `;
     });
 }
 
-function increaseQty(id) {
-    let product = products.find(p => p.id === id);
+function changeQty(id,change){
+    let product = products.find(p=>p.id===id);
 
-    if (!cart[id]) {
-        cart[id] = { ...product, qty: 0 };
+    if(!cart[id]){
+        cart[id]={...product,qty:0};
     }
 
-    cart[id].qty++;
+    cart[id].qty += change;
+
+    if(cart[id].qty<=0){
+        delete cart[id];
+    }
+
     updateCart();
 }
 
-function decreaseQty(id) {
-    if (cart[id]) {
-        cart[id].qty--;
-        if (cart[id].qty <= 0) {
-            delete cart[id];
-        }
-    }
+function removeItem(id){
+    delete cart[id];
     updateCart();
 }
 
-function updateCart() {
-    const cartContainer = document.getElementById("cart-items");
-    const totalPrice = document.getElementById("total-price");
+function updateCart(){
+    let cartItems = document.getElementById("cartItems");
+    let totalPrice = document.getElementById("totalPrice");
+    let cartCount = document.getElementById("cartCount");
 
-    cartContainer.innerHTML = "";
-    let total = 0;
+    cartItems.innerHTML="";
+    let total=0;
+    let totalItem=0;
 
-    Object.values(cart).forEach(item => {
-        total += item.price * item.qty;
+    Object.values(cart).forEach(item=>{
+        let subtotal=item.price*item.qty;
+        total+=subtotal;
+        totalItem+=item.qty;
 
-        cartContainer.innerHTML += `
-            <p>${item.name} x ${item.qty} = Rp ${item.price * item.qty}</p>
+        cartItems.innerHTML+=`
+        <div class="cart-item">
+            <span>${item.name} x ${item.qty}</span>
+            <span>Rp ${subtotal}</span>
+            <button onclick="removeItem(${item.id})">X</button>
+        </div>
         `;
     });
 
-    totalPrice.innerText = total;
+    totalPrice.innerText=total;
+    cartCount.innerText=totalItem;
+
     renderProducts();
 }
 
-function checkout() {
-    if (Object.keys(cart).length === 0) {
-        alert("Keranjang kosong!");
+function processPayment(){
+    let nama=document.getElementById("nama").value;
+    let alamat=document.getElementById("alamat").value;
+    let nohp=document.getElementById("nohp").value;
+
+    if(!nama||!alamat||!nohp){
+        alert("Isi semua data dulu!");
         return;
     }
 
-    let nama = document.getElementById("nama").value;
-    let alamat = document.getElementById("alamat").value;
-    let nohp = document.getElementById("nohp").value;
+    let invoice=document.getElementById("invoiceContent");
+    let invoiceNumber="INV"+Date.now();
 
-    if (!nama || !alamat || !nohp) {
-        alert("Isi semua data dulu ya!");
-        return;
-    }
-
-    let receiptHTML = `
-        <h2>🧾 STRUK PEMBELIAN</h2>
-        <p><b>Nama:</b> ${nama}</p>
-        <p><b>Alamat:</b> ${alamat}</p>
-        <p><b>No HP:</b> ${nohp}</p>
-        <hr>
+    let html=`
+    <p><b>No Invoice:</b> ${invoiceNumber}</p>
+    <p><b>Nama:</b> ${nama}</p>
+    <p><b>Alamat:</b> ${alamat}</p>
+    <p><b>No HP:</b> ${nohp}</p>
+    <hr>
     `;
 
-    let total = 0;
+    let total=0;
 
-    Object.values(cart).forEach(item => {
-        let subtotal = item.price * item.qty;
-        total += subtotal;
-
-        receiptHTML += `
-            <p>${item.name} x ${item.qty} = Rp ${subtotal}</p>
-        `;
+    Object.values(cart).forEach(item=>{
+        let subtotal=item.price*item.qty;
+        total+=subtotal;
+        html+=`<p>${item.name} x ${item.qty} = Rp ${subtotal}</p>`;
     });
 
-    receiptHTML += `
-        <hr>
-        <h3>Total Bayar: Rp ${total}</h3>
-        <p>Terima kasih sudah belanja 😄</p>
-    `;
+    html+=`<hr><h3>Total Bayar: Rp ${total}</h3>
+    <p>Status: Pembayaran Lunas ✅</p>`;
 
-    document.getElementById("receipt").innerHTML = receiptHTML;
+    invoice.innerHTML=html;
 
-    cart = {};
+    cart={};
     updateCart();
+    showSection("invoiceSection");
 }
 
+showSection("productSection");
 renderProducts();
 
 </script>
-
 </body>
 </html>
