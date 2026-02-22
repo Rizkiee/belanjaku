@@ -47,8 +47,16 @@
     <h2>Keranjang</h2>
     <div id="cart-items"></div>
     <h3>Total: Rp <span id="total-price">0</span></h3>
-    <button onclick="checkout()">Checkout</button>
+
+    <h3>Checkout</h3>
+    <input type="text" id="nama" placeholder="Nama"><br><br>
+    <input type="text" id="alamat" placeholder="Alamat"><br><br>
+    <input type="text" id="nohp" placeholder="No HP"><br><br>
+
+    <button onclick="checkout()">Bayar Sekarang</button>
 </div>
+
+<div id="receipt" style="margin-top:30px;"></div>
 
 <script>
 
@@ -129,7 +137,42 @@ function checkout() {
         return;
     }
 
-    alert("Pembayaran berhasil 😄");
+    let nama = document.getElementById("nama").value;
+    let alamat = document.getElementById("alamat").value;
+    let nohp = document.getElementById("nohp").value;
+
+    if (!nama || !alamat || !nohp) {
+        alert("Isi semua data dulu ya!");
+        return;
+    }
+
+    let receiptHTML = `
+        <h2>🧾 STRUK PEMBELIAN</h2>
+        <p><b>Nama:</b> ${nama}</p>
+        <p><b>Alamat:</b> ${alamat}</p>
+        <p><b>No HP:</b> ${nohp}</p>
+        <hr>
+    `;
+
+    let total = 0;
+
+    Object.values(cart).forEach(item => {
+        let subtotal = item.price * item.qty;
+        total += subtotal;
+
+        receiptHTML += `
+            <p>${item.name} x ${item.qty} = Rp ${subtotal}</p>
+        `;
+    });
+
+    receiptHTML += `
+        <hr>
+        <h3>Total Bayar: Rp ${total}</h3>
+        <p>Terima kasih sudah belanja 😄</p>
+    `;
+
+    document.getElementById("receipt").innerHTML = receiptHTML;
+
     cart = {};
     updateCart();
 }
