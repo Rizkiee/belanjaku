@@ -317,6 +317,10 @@ button:hover{
 .product:hover{
     transform:translateY(-6px) scale(1.02);
 }
+
+.product-card p {
+    text-align: justify;
+}
     
 </style>
     
@@ -470,11 +474,21 @@ let products = [
 
 let cart = {};
 
-function showSection(sectionId){
-    document.querySelectorAll(".section").forEach(sec=>{
-        sec.style.display="none";
+function showSection(sectionId) {
+    document.querySelectorAll(".section").forEach(sec => {
+        sec.style.display = "none";
     });
-    document.getElementById(sectionId).style.display="block";
+
+    document.getElementById(sectionId).style.display = "block";
+
+    // 🔥 Tambahan ini
+    const cartIcon = document.querySelector(".cart-icon");
+
+    if (sectionId === "invoiceSection") {
+        cartIcon.style.display = "none";
+    } else {
+        cartIcon.style.display = "block";
+    }
 }
 
 function renderProducts(){
