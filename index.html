@@ -422,6 +422,37 @@ button:hover{
     
 <script>
 
+let products = [
+    {
+        id: 1,
+        name: "Paracetamol",
+        price: 15000,
+        img: "images/paracetamol.jpg",
+        desc: "Obat untuk meredakan demam dan nyeri ringan."
+    },
+    {
+        id: 2,
+        name: "Cetirizine",
+        price: 12000,
+        img: "images/cetirizine.jpg",
+        desc: "Obat untuk alergi dan gatal."
+    },
+    {
+        id: 3,
+        name: "Omeprazole",
+        price: 20000,
+        img: "images/omeprazole.jpg",
+        desc: "Obat untuk gangguan lambung."
+    },
+    {
+        id: 4,
+        name: "Promag",
+        price: 20000,
+        img: "images/promag.jpg",
+        desc: "Obat untuk gangguan lambung."
+    }
+];
+
 let tempQty = 1;
 
 function showDetail(id){
@@ -469,37 +500,6 @@ function addFromDetail(id){
     showSection("productSection");
     showToast("Produk ditambahkan ke keranjang 🛒");
 }
-    
-let products = [
-    {
-        id:1,
-        name:"Paracetamol",
-        price:15000,
-        img:"https://via.placeholder.com/150",
-        desc:"Obat untuk meredakan demam dan nyeri ringan."
-    },
-    {
-        id:2,
-        name:"Cetirizine",
-        price:25000,
-        img:"https://via.placeholder.com/150",
-        desc:"Mengurangi dampak alergi"
-    },
-    {
-        id:3,
-        name:"Omeprazole",
-        price:10000,
-        img:"https://via.placeholder.com/150",
-        desc:"Mengatasi asam lambung."
-    },
-    {
-        id:4,
-        name:"Promag",
-        price:10000,
-        img:"https://via.placeholder.com/150",
-        desc:"Mengatasi asam lambung."
-    }
-];
 
 let cart = {};
 
@@ -647,37 +647,6 @@ function showToast(message){
         toast.classList.remove("show");
     },2000);
 }
-
-const products = [
-    {
-        id: 1,
-        name: "Paracetamol",
-        price: 15000,
-        img: "images/paracetamol.jpg",
-        desc: "Obat untuk meredakan demam dan nyeri ringan."
-    },
-    {
-        id: 2,
-        name: "Cetirizine",
-        price: 12000,
-        img: "images/cetirizine.jpg",
-        desc: "Obat untuk alergi dan gatal."
-    },
-    {
-        id: 3,
-        name: "Omeprazole",
-        price: 20000,
-        img: "images/omeprazole.jpg",
-        desc: "Obat untuk gangguan lambung."
-    }
-    {
-        id: 4,
-        name: "Promag",
-        price: 20000,
-        img: "images/promag.jpg",
-        desc: "Obat untuk gangguan lambung."
-    }
-];
     
 </script>
 </body>
