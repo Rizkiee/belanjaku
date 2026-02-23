@@ -191,7 +191,11 @@ function showDetail(id){
     <button onclick="addFromDetail(${product.id})">
         Masukkan ke Keranjang
     </button>
-`;    
+    `;
+
+    document.getElementById("detailContent").innerHTML = html;
+    showSection("detailSection");
+}    
 function changeTempQty(change){
     tempQty += change;
     if(tempQty < 1) tempQty = 1;
