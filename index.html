@@ -318,8 +318,37 @@ button:hover{
     transform:translateY(-6px) scale(1.02);
 }
 
-.product-card p {
+#detailContent p {
     text-align: justify;
+    line-height: 1.6;
+}
+
+@media print {
+
+    body * {
+        visibility: hidden;
+    }
+
+    #invoiceSection,
+    #invoiceSection * {
+        visibility: visible;
+    }
+
+    #invoiceSection {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+
+    button {
+        display: none !important;
+    }
+
+    .cart-icon {
+        display: none !important;
+    }
+
 }
     
 </style>
