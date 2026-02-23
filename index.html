@@ -84,18 +84,20 @@ h2{
 }
 
 button{
-    padding:8px 14px;
+    padding:10px 18px;
     border:none;
-    border-radius:12px;
+    border-radius:14px;
     cursor:pointer;
-    background:#81c784;
+    background:linear-gradient(135deg,#81c784,#66bb6a);
     color:white;
-    font-weight:500;
+    font-weight:600;
     transition:0.2s;
+    box-shadow:0 6px 14px rgba(0,0,0,0.08);
 }
 
 button:hover{
-    background:#66bb6a;
+    transform:translateY(-2px);
+    box-shadow:0 10px 18px rgba(0,0,0,0.12);
 }
 
 .cart-item{
@@ -111,18 +113,19 @@ button:hover{
 
 .cart-count{
     position:absolute;
-    top:-8px;
-    right:-10px;
+    top:-6px;
+    right:-8px;
     background:#ff5252;
     color:white;
     font-size:11px;
-    width:18px;
-    height:18px;
+    width:20px;
+    height:20px;
     display:flex;
     align-items:center;
     justify-content:center;
     border-radius:50%;
-    font-weight:bold;
+    font-weight:600;
+    box-shadow:0 4px 10px rgba(0,0,0,0.2);
 }
 
 .cart-icon{
@@ -167,6 +170,153 @@ button:hover{
 .form-group{
     margin-bottom:16px;
 }
+
+.qty-control{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:18px;
+    margin:20px 0;
+}
+
+.qty-control button{
+    width:45px;
+    height:45px;
+    border-radius:14px;
+    font-size:18px;
+}
+
+#tempQty{
+    font-size:20px;
+    font-weight:600;
+    min-width:30px;
+    text-align:center;
+}
+
+.cart-buttons{
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    margin-top:20px;
+    flex-wrap:wrap;
+}
+
+.cart-buttons button{
+    min-width:140px;
+}
+
+#checkoutSection button{
+    margin-top:25px;
+    padding:12px 24px;
+    font-size:15px;
+}
+
+#detailSection{
+    text-align:center;
+}
+
+#detailSection img{
+    max-width:260px;
+    margin:20px auto;
+    display:block;
+}
+
+.checkout-buttons{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+    margin-top:25px;
+}
+
+.primary-btn{
+    width:100%;
+    max-width:320px;
+    font-size:16px;
+    padding:14px;
+}
+
+.secondary-btn{
+    background:#c8e6c9;
+    color:#2e7d32;
+    box-shadow:none;
+}
+
+#checkoutSection{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+#checkoutSection form,
+#checkoutSection > div{
+    width:100%;
+    max-width:380px;
+}
+
+#checkoutSection input{
+    background:white;
+}
+
+.checkout-card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.06);
+    width:100%;
+    max-width:380px;
+}
+
+.section{
+    display:none;
+    padding:25px;
+    animation:fadeSlide 0.35s ease;
+}
+
+@keyframes fadeSlide{
+    from{
+        opacity:0;
+        transform:translateY(15px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+#toast{
+    position:fixed;
+    bottom:25px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#2e7d32;
+    color:white;
+    padding:12px 20px;
+    border-radius:30px;
+    font-size:14px;
+    opacity:0;
+    pointer-events:none;
+    transition:0.3s;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+#toast.show{
+    opacity:1;
+    bottom:40px;
+}
+
+.invoice-card{
+    background:white;
+    padding:25px;
+    border-radius:20px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    max-width:400px;
+    margin:auto;
+}
+
+.product:hover{
+    transform:translateY(-6px) scale(1.02);
+}
     
 </style>
     
@@ -197,8 +347,10 @@ button:hover{
     <h2>Keranjang</h2>
     <div id="cartItems"></div>
     <h3>Total: Rp <span id="totalPrice">0</span></h3>
+</div>
+    <div class="cart-buttons">
     <button onclick="showSection('checkoutSection')">Checkout</button>
-    <button onclick="showSection('productSection')">⬅ Kembali Belanja</button>
+    <button onclick="showSection('productSection')">← Kembali Belanja</button>
 </div>
 
 <!-- CHECKOUT -->
@@ -213,7 +365,19 @@ button:hover{
 <div class="form-group">
     <input id="nohp" placeholder="No HP">
 </div>
+<div class="checkout-buttons">
+    <button onclick="processPayment()" class="primary-btn">
+        Bayar Sekarang
+    </button>
 
+    <button onclick="showSection('cartSection')" class="secondary-btn">
+        ← Kembali ke Keranjang
+    </button>
+</div>
+    <div class="checkout-card">
+    <!-- semua input + button disini -->
+</div>
+    
 <!-- INVOICE -->
 <div id="invoiceSection" class="section">
     <h2>🧾 Invoice</h2>
@@ -222,6 +386,8 @@ button:hover{
     <button onclick="showSection('productSection')">Kembali ke Toko</button>
 </div>
 
+    <div id="toast"></div>
+    
 <script>
 
 let tempQty = 1;
@@ -237,11 +403,11 @@ function showDetail(id){
     <p>${product.desc}</p>
     <h3 style="color:#2e7d32;">Rp ${product.price}</h3>
 
-    <div style="display:flex;gap:12px;align-items:center;margin:15px 0;">
-        <button onclick="changeTempQty(-1)">-</button>
-        <span id="tempQty" style="font-weight:bold;font-size:18px;">${tempQty}</span>
-        <button onclick="changeTempQty(1)">+</button>
-    </div>
+    <div class="qty-control">
+    <button onclick="changeTempQty(-1)">-</button>
+    <span id="tempQty">${tempQty}</span>
+    <button onclick="changeTempQty(1)">+</button>
+</div>
 
     <button onclick="addFromDetail(${product.id})">
         Masukkan ke Keranjang
@@ -269,6 +435,7 @@ function addFromDetail(id){
 
     updateCart();
     showSection("productSection");
+    showToast("Produk ditambahkan ke keranjang 🛒");
 }
     
 let products = [
@@ -393,12 +560,14 @@ function processPayment(){
     let invoiceNumber="INV"+Date.now();
 
     let html=`
-    <p><b>No Invoice:</b> ${invoiceNumber}</p>
-    <p><b>Nama:</b> ${nama}</p>
-    <p><b>Alamat:</b> ${alamat}</p>
-    <p><b>No HP:</b> ${nohp}</p>
-    <hr>
-    `;
+<div class="invoice-card">
+<h3>Toko Mbah Dukun</h3>
+<p>No Invoice: ${invoiceNumber}</p>
+<p>Nama: ${nama}</p>
+<p>Alamat: ${alamat}</p>
+<p>No HP: ${nohp}</p>
+<hr>
+`;
 
     let total=0;
 
@@ -408,8 +577,14 @@ function processPayment(){
         html+=`<p>${item.name} x ${item.qty} = Rp ${subtotal}</p>`;
     });
 
-    html+=`<hr><h3>Total Bayar: Rp ${total}</h3>
-    <p>Status: Pembayaran Lunas ✅</p>`;
+    html+=`
+<hr>
+<h3>Total Bayar: Rp ${total}</h3>
+<p style="color:green;font-weight:600;">
+Status: Pembayaran Lunas ✅
+</p>
+</div>
+`;
 
     invoice.innerHTML=html;
 
@@ -421,6 +596,16 @@ function processPayment(){
 showSection("productSection");
 renderProducts();
 
+function showToast(message){
+    let toast=document.getElementById("toast");
+    toast.innerText=message;
+    toast.classList.add("show");
+
+    setTimeout(()=>{
+        toast.classList.remove("show");
+    },2000);
+}
+    
 </script>
 </body>
 </html>
