@@ -130,6 +130,43 @@ button:hover{
     font-size:22px;
     cursor:pointer;
 }
+
+/* Semua button rata tengah */
+.section button{
+    display:block;
+    margin:12px auto;
+}
+
+/* KECUALI tombol kembali di detail */
+#detailSection > button{
+    margin:0;
+}
+
+#checkoutSection{
+    text-align:center;
+}
+
+#checkoutSection input{
+    width:100%;
+    max-width:320px;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid #c8e6c9;
+    outline:none;
+    font-family:'Poppins',sans-serif;
+    font-size:14px;
+    transition:0.2s;
+    box-shadow:0 4px 10px rgba(0,0,0,0.04);
+}
+
+#checkoutSection input:focus{
+    border-color:#66bb6a;
+    box-shadow:0 0 0 3px rgba(102,187,106,0.15);
+}
+
+.form-group{
+    margin-bottom:16px;
+}
     
 </style>
     
@@ -167,10 +204,14 @@ button:hover{
 <!-- CHECKOUT -->
 <div id="checkoutSection" class="section">
     <h2>Data Pembeli</h2>
-    <input id="nama" placeholder="Nama"><br><br>
-    <input id="alamat" placeholder="Alamat"><br><br>
-    <input id="nohp" placeholder="No HP"><br><br>
-    <button onclick="processPayment()">Bayar Sekarang</button>
+    <div class="form-group">
+    <input id="nama" placeholder="Nama">
+</div>
+<div class="form-group">
+    <input id="alamat" placeholder="Alamat">
+</div>
+<div class="form-group">
+    <input id="nohp" placeholder="No HP">
 </div>
 
 <!-- INVOICE -->
