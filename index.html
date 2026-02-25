@@ -7,23 +7,39 @@
 
 <style>
 
+:root{
+    --dark-green:#2f3e2e;
+    --olive:#3e4f3c;
+    --gold:#c8a74e;
+    --light-gold:#e6c97a;
+    --cream:#f5f1e6;
+    --black:#1f2a1f;
+}
+    
 body{
     font-family:'Poppins',sans-serif;
     margin:0;
     padding:0;
-    background:linear-gradient(to bottom,#f4fbf6,#e8f5e9);
+    background:linear-gradient(to bottom,var(--dark-green),var(--olive));
+    color:var(--cream);
 }
-
+    
 header{
     display:flex;
     justify-content:space-between;
     align-items:center;
     padding:18px 22px;
-    background:#66bb6a;
-    color:white;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    background:var(--black);
+    border-bottom:2px solid var(--gold);
+    color:var(--light-gold);
+    box-shadow:0 4px 20px rgba(0,0,0,0.5);
 }
 
+header h3{
+    letter-spacing:1px;
+    font-weight:600;
+}
+    
 h2{
     margin-bottom:20px;
     color:#2e7d32;
@@ -41,11 +57,12 @@ h2{
 }
 
 .product{
-    background:white;
-    border-radius:18px;
-    padding:14px;
-    box-shadow:0 6px 16px rgba(0,0,0,0.06);
-    transition:0.2s;
+    background:#1e261e;
+    border:1px solid rgba(200,167,78,0.2);
+    border-radius:20px;
+    padding:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    transition:0.3s;
     cursor:pointer;
     position:relative;
     display:flex;
@@ -53,7 +70,9 @@ h2{
 }
 
 .product:hover{
-    transform:translateY(-6px);
+    transform:translateY(-8px);
+    box-shadow:0 15px 35px rgba(0,0,0,0.6);
+    border:1px solid var(--gold);
 }
 
 .product img{
@@ -69,7 +88,7 @@ h2{
 
 .price{
     font-weight:600;
-    color:#43a047;
+    color:var(--light-gold);
 }
 
 .stock-badge{
@@ -88,18 +107,18 @@ button{
     border:none;
     border-radius:14px;
     cursor:pointer;
-    background:linear-gradient(135deg,#81c784,#66bb6a);
-    color:white;
+    background:linear-gradient(135deg,var(--gold),var(--light-gold));
+    color:var(--black);
     font-weight:600;
-    transition:0.2s;
-    box-shadow:0 6px 14px rgba(0,0,0,0.08);
+    box-shadow:0 8px 20px rgba(200,167,78,0.3);
+    transition:0.3s;
 }
 
 button:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 18px rgba(0,0,0,0.12);
+    transform:translateY(-3px);
+    box-shadow:0 12px 25px rgba(200,167,78,0.5);
 }
-
+    
 .cart-item{
     display:flex;
     justify-content:space-between;
@@ -306,10 +325,12 @@ button:hover{
 }
 
 .invoice-card{
-    background:white;
+    background:var(--cream);
+    color:var(--black);
     padding:25px;
     border-radius:20px;
-    box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    border:2px solid var(--gold);
+    box-shadow:0 10px 30px rgba(0,0,0,0.4);
     max-width:400px;
     margin:auto;
 }
