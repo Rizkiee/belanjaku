@@ -418,13 +418,30 @@ button:hover{
     box-shadow:0 5px 15px rgba(200,167,78,0.4);
 }
 
-.home-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
+.home-menu{
+    display:flex;
+    flex-direction:column;
     gap:20px;
     padding:25px;
 }
 
+.home-btn{
+    width:100%;
+    padding:35px 20px;
+    border-radius:25px;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    background:linear-gradient(135deg,var(--gold),var(--light-gold));
+    color:var(--black);
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.home-btn:hover{
+    transform:translateY(-6px);
+}
 .menu-card{
     background:linear-gradient(135deg,var(--gold),var(--light-gold));
     color:var(--black);
@@ -449,6 +466,22 @@ button:hover{
     font-size:13px;
     opacity:0.8;
 }
+
+.category-tabs{
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding-bottom:10px;
+    scrollbar-width:none;
+}
+
+.category-tabs::-webkit-scrollbar{
+    display:none;
+}
+
+.tab-btn{
+    flex:0 0 auto;
+}
     
 </style>
     
@@ -462,7 +495,8 @@ button:hover{
     </div>
 </header>
 
-<!-- DISCLAIMER -->
+<div id="homeSection" class="section">
+
     <div class="disclaimer-banner">
         <h3>⚠️ Disclaimer</h3>
         <p>
@@ -473,15 +507,13 @@ button:hover{
         </p>
     </div>
 
-<!-- HOME -->
-<div id="homeSection" class="section">
-    <div class="home-grid">
+    <div class="home-menu">
 
-        <div class="menu-card" onclick="showSection('productSection')">
+        <div class="home-btn" onclick="showSection('productSection')">
             🌿 Bahan Herbal
         </div>
 
-        <div class="menu-card" onclick="showSection('recipeSection')">
+        <div class="home-btn" onclick="showSection('recipeSection')">
             📜 Resep Jamu
         </div>
 
@@ -489,10 +521,9 @@ button:hover{
 
     <div class="home-footnote">
         <hr>
-        <p>
-            * Tidak ada penyimpanan data, tracking, maupun pengumpulan informasi pribadi.
-        </p>
+        <p>* Tidak ada penyimpanan data, tracking, maupun pengumpulan informasi pribadi.</p>
     </div>
+
 </div>
     
 <!-- DETAIL PRODUK -->
