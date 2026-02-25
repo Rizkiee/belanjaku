@@ -6,7 +6,25 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+.disclaimer-banner{
+    background:rgba(200,167,78,0.1);
+    border:1px solid var(--gold);
+    padding:20px;
+    border-radius:18px;
+    margin-bottom:25px;
+    text-align:center;
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
 
+.disclaimer-banner h3{
+    color:var(--light-gold);
+    margin-bottom:10px;
+}
+
+.disclaimer-banner p{
+    font-size:14px;
+    line-height:1.6;
+}
 :root{
     --dark-green:#2f3e2e;
     --olive:#3e4f3c;
@@ -372,6 +390,34 @@ button:hover{
 
 }
     
+.category-tabs{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:25px;
+    justify-content:center;
+}
+
+.tab-btn{
+    background:transparent;
+    border:1px solid var(--gold);
+    color:var(--light-gold);
+    padding:8px 18px;
+    border-radius:30px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.tab-btn:hover{
+    background:rgba(200,167,78,0.2);
+}
+
+.tab-btn.active{
+    background:linear-gradient(135deg,var(--gold),var(--light-gold));
+    color:var(--black);
+    box-shadow:0 5px 15px rgba(200,167,78,0.4);
+}
+    
 </style>
     
 <body>
@@ -382,6 +428,10 @@ button:hover{
         🛒
         <span class="cart-count" id="cartCount">0</span>
     </div>
+    <nav class="main-nav">
+    <button onclick="showSection('productSection')">Bahan Herbal</button>
+    <button onclick="showSection('recipeSection')">Resep Jamu</button>
+</nav>
 </header>
 
 <!-- DETAIL PRODUK -->
@@ -395,6 +445,29 @@ button:hover{
     <h2>Produk</h2>
     <div class="products" id="productList"></div>
 </div>
+<div class="disclaimer-banner">
+    <h3>⚠️ Disclaimer</h3>
+    <p>
+        Website ini merupakan simulasi toko herbal tradisional.
+        Resep jamu diambil dari literatur dan buku pengobatan tradisional Jawa.
+        Website ini tidak mengambil data pengguna dan hanya dibuat untuk
+        tujuan edukasi dan hiburan.
+    </p>
+</div> 
+
+    <div class="category-tabs">
+    <button class="tab-btn active" onclick="filterCategory('all', this)">Semua</button>
+    <button class="tab-btn" onclick="filterCategory('Rimpang', this)">Rimpang</button>
+    <button class="tab-btn" onclick="filterCategory('Daun', this)">Daun</button>
+    <button class="tab-btn" onclick="filterCategory('Biji', this)">Biji</button>
+    <button class="tab-btn" onclick="filterCategory('Akar', this)">Akar</button>
+</div>
+
+ <!-- RESEP JAMU -->
+<div id="recipeSection" class="section">
+    <h2>Resep Jamu Tradisional</h2>
+    <div id="recipeList"></div>
+</div>   
 
 <!-- KERANJANG -->
 <div id="cartSection" class="section">
@@ -407,7 +480,10 @@ button:hover{
     <button onclick="showSection('productSection')">← Kembali Belanja</button>
     </div>
 </div>
-
+<p style="margin-top:10px;font-size:13px;opacity:0.8;">
+    Tidak ada penyimpanan data, tracking, maupun pengumpulan informasi pribadi.
+</p>
+    
 <!-- CHECKOUT -->
 <div id="checkoutSection" class="section">
     <h2>Data Pembeli</h2>
@@ -443,34 +519,35 @@ button:hover{
     
 <script>
 
+let recipes = [
+    {
+        name:"Jamu Kunyit Asam",
+        desc:"Baik untuk daya tahan tubuh dan nyeri haid.",
+        source:"Diadaptasi dari buku Pengobatan Tradisional Jawa"
+    },
+    {
+        name:"Beras Kencur",
+        desc:"Baik untuk pegal linu dan meningkatkan stamina.",
+        source:"Diadaptasi dari literatur jamu tradisional"
+    }
+];
+    
 let products = [
     {
-        id: 1,
-        name: "Paracetamol",
-        price: 15000,
-        img: "images/paracetamol.jpg",
-        desc: "Obat untuk meredakan demam dan nyeri ringan."
+        id:1,
+        name:"Kunyit",
+        price:10000,
+        img:"images/kunyit.jpg",
+        desc:"Rimpang herbal",
+        category:"Rimpang"
     },
     {
-        id: 2,
-        name: "Cetirizine",
-        price: 12000,
-        img: "images/cetirizine.jpg",
-        desc: "Obat untuk alergi dan gatal."
-    },
-    {
-        id: 3,
-        name: "Omeprazole",
-        price: 20000,
-        img: "images/omeprazole.jpg",
-        desc: "Obat untuk gangguan lambung."
-    },
-    {
-        id: 4,
-        name: "Promag",
-        price: 20000,
-        img: "images/promag.jpg",
-        desc: "Obat untuk gangguan lambung."
+        id:2,
+        name:"Daun Sirih",
+        price:8000,
+        img:"images/sirih.jpg",
+        desc:"Daun herbal",
+        category:"Daun"
     }
 ];
 
@@ -667,6 +744,50 @@ function showToast(message){
     setTimeout(()=>{
         toast.classList.remove("show");
     },2000);
+}
+
+function renderRecipes(){
+    let container=document.getElementById("recipeList");
+    container.innerHTML="";
+
+    recipes.forEach(r=>{
+        container.innerHTML+=`
+            <div class="product">
+                <h4>${r.name}</h4>
+                <p>${r.desc}</p>
+                <small style="opacity:0.7;">${r.source}</small>
+            </div>
+        `;
+    });
+}    
+
+renderRecipes();
+
+function filterCategory(category, element){
+
+    // Update active button
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+        btn.classList.remove('active');
+    });
+    element.classList.add('active');
+
+    let container=document.getElementById("productList");
+    container.innerHTML="";
+
+    let filtered = category==="all"
+        ? products
+        : products.filter(p=>p.category===category);
+
+    filtered.forEach(p=>{
+        container.innerHTML+=`
+        <div class="product" onclick="showDetail(${p.id})">
+            <div class="stock-badge">Ready</div>
+            <img src="${p.img}">
+            <h4>${p.name}</h4>
+            <p class="price">Rp ${p.price}</p>
+        </div>
+        `;
+    });
 }
     
 </script>
