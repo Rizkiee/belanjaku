@@ -705,6 +705,8 @@ function addFromDetail(id){
 }
 
 let cart = {};
+    
+let activeCategory = "all";
 
 function showSection(sectionId) {
     document.querySelectorAll(".section").forEach(sec => {
@@ -728,16 +730,21 @@ function renderProducts(){
     let container = document.getElementById("productList");
     container.innerHTML="";
 
-    products.forEach(p=>{
+    let filteredProducts = activeCategory === "all"
+        ? products
+        : products.filter(p => p.category === activeCategory);
+
+    filteredProducts.forEach(p=>{
 
         container.innerHTML += `
-        <div class="product">
+        <div class="product" onclick="showDetail(${p.id})">
             <div class="stock-badge">Ready</div>
+
             <img src="${p.img}">
             <h4>${p.name}</h4>
             <p class="price">Rp ${p.price}</p>
 
-            <div class="qty-control">
+            <div class="qty-control" onclick="event.stopPropagation()">
                 <button onclick="changeQty(${p.id}, -1)">-</button>
                 <span>${cart[p.id] ? cart[p.id].qty : 0}</span>
                 <button onclick="changeQty(${p.id}, 1)">+</button>
@@ -746,7 +753,6 @@ function renderProducts(){
         `;
     });
 }
-
 function changeQty(id,change){
     let product = products.find(p=>p.id===id);
 
@@ -884,35 +890,14 @@ renderRecipes();
 
 function filterCategory(category, element){
 
-    // Update active button
-    document.querySelectorAll('.tab-btn').forEach(btn=>{
-        btn.classList.remove('active');
-    });
-    element.classList.add('active');
+    activeCategory = category;
 
-    let container=document.getElementById("productList");
-    container.innerHTML="";
+    document.querySelectorAll(".category-btn")
+        .forEach(btn => btn.classList.remove("active"));
 
-    let filtered = category==="all"
-        ? products
-        : products.filter(p=>p.category===category);
+    element.classList.add("active");
 
-    filtered.forEach(p=>{
-    container.innerHTML+=`
-    <div class="product">
-        <div class="stock-badge">Ready</div>
-        <img src="${p.img}">
-        <h4>${p.name}</h4>
-        <p class="price">Rp ${p.price}</p>
-
-        <div class="qty-control">
-            <button onclick="changeQty(${p.id}, -1)">-</button>
-            <span>${cart[p.id] ? cart[p.id].qty : 0}</span>
-            <button onclick="changeQty(${p.id}, 1)">+</button>
-        </div>
-    </div>
-    `;
-});
+    renderProducts();
 }
 
 function showRecipeDetail(id){
