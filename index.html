@@ -390,14 +390,6 @@ button:hover{
 
 }
     
-.category-tabs{
-    display:flex;
-    gap:12px;
-    flex-wrap:wrap;
-    margin-bottom:25px;
-    justify-content:center;
-}
-
 .tab-btn{
     background:transparent;
     border:1px solid var(--gold);
@@ -423,10 +415,12 @@ button:hover{
     flex-direction:column;
     gap:20px;
     padding:25px;
+    align-items:center; 
 }
 
 .home-btn{
     width:100%;
+    max-width:350px;   
     padding:35px 20px;
     border-radius:25px;
     font-size:20px;
@@ -573,9 +567,6 @@ button:hover{
     <button onclick="showSection('productSection')">← Kembali Belanja</button>
     </div>
 </div>
-<p style="margin-top:10px;font-size:13px;opacity:0.8;">
-    Tidak ada penyimpanan data, tracking, maupun pengumpulan informasi pribadi.
-</p>
     
 <!-- CHECKOUT -->
 <div id="checkoutSection" class="section">
