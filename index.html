@@ -417,6 +417,30 @@ button:hover{
     color:var(--black);
     box-shadow:0 5px 15px rgba(200,167,78,0.4);
 }
+
+.home-menu{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    padding:30px;
+}
+
+.menu-card{
+    background:linear-gradient(135deg,var(--gold),var(--light-gold));
+    color:var(--black);
+    padding:35px;
+    border-radius:25px;
+    font-size:20px;
+    font-weight:600;
+    text-align:center;
+    cursor:pointer;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    transition:0.3s;
+}
+
+.menu-card:hover{
+    transform:translateY(-6px);
+}
     
 </style>
     
@@ -428,12 +452,45 @@ button:hover{
         🛒
         <span class="cart-count" id="cartCount">0</span>
     </div>
-    <nav class="main-nav">
-    <button onclick="showSection('productSection')">Bahan Herbal</button>
-    <button onclick="showSection('recipeSection')">Resep Jamu</button>
-</nav>
+    
 </header>
 
+<!-- HOME -->
+<div id="homeSection" class="section">
+    <div class="home-menu">
+
+        <div class="menu-card" onclick="showSection('productSection')">
+            🌿 Bahan Herbal
+        </div>
+
+        <div class="menu-card" onclick="showSection('recipeSection')">
+            📜 Resep Jamu
+        </div>
+
+        <div class="menu-card" onclick="showSection('disclaimerSection')">
+            ⚠ Disclaimer
+        </div>
+
+    </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div id="disclaimerSection" class="section">
+    <div class="disclaimer-banner">
+        <h3>⚠️ Disclaimer</h3>
+        <p>
+            Website ini merupakan simulasi toko herbal tradisional.
+            Resep jamu diambil dari literatur dan buku pengobatan tradisional Jawa.
+            Website ini tidak mengambil data pengguna dan hanya dibuat untuk
+            tujuan edukasi dan hiburan.
+        </p>
+    </div>
+
+    <button onclick="showSection('homeSection')">
+        ← Kembali ke Home
+    </button>
+</div>
+    
 <!-- DETAIL PRODUK -->
 <div id="detailSection" class="section">
     <button onclick="showSection('productSection')">⬅ Kembali</button>
@@ -442,25 +499,21 @@ button:hover{
     
 <!-- PRODUK -->
 <div id="productSection" class="section">
-    <h2>Produk</h2>
-    <div class="products" id="productList"></div>
-</div>
-<div class="disclaimer-banner">
-    <h3>⚠️ Disclaimer</h3>
-    <p>
-        Website ini merupakan simulasi toko herbal tradisional.
-        Resep jamu diambil dari literatur dan buku pengobatan tradisional Jawa.
-        Website ini tidak mengambil data pengguna dan hanya dibuat untuk
-        tujuan edukasi dan hiburan.
-    </p>
-</div> 
+    <h2>Bahan Herbal</h2>
 
     <div class="category-tabs">
-    <button class="tab-btn active" onclick="filterCategory('all', this)">Semua</button>
-    <button class="tab-btn" onclick="filterCategory('Rimpang', this)">Rimpang</button>
-    <button class="tab-btn" onclick="filterCategory('Daun', this)">Daun</button>
-    <button class="tab-btn" onclick="filterCategory('Biji', this)">Biji</button>
-    <button class="tab-btn" onclick="filterCategory('Akar', this)">Akar</button>
+        <button class="tab-btn active" onclick="filterCategory('all', this)">Semua</button>
+        <button class="tab-btn" onclick="filterCategory('Rimpang', this)">Rimpang</button>
+        <button class="tab-btn" onclick="filterCategory('Daun', this)">Daun</button>
+        <button class="tab-btn" onclick="filterCategory('Biji', this)">Biji</button>
+        <button class="tab-btn" onclick="filterCategory('Akar', this)">Akar</button>
+    </div>
+
+    <div class="products" id="productList"></div>
+
+    <button onclick="showSection('homeSection')">
+        ← Kembali ke Home
+    </button>
 </div>
 
  <!-- RESEP JAMU -->
@@ -733,7 +786,7 @@ Status: Pembayaran Lunas ✅
     showSection("invoiceSection");
 }
 
-showSection("productSection");
+showSection("homeSection");
 renderProducts();
 
 function showToast(message){
