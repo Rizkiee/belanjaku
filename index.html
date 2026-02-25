@@ -139,13 +139,14 @@ button:hover{
     
 .cart-item{
     display:flex;
-    justify-content:space-between;
     align-items:center;
-    background:white;
+    justify-content:space-between;
+    background:#ffffff;
+    color:#1f2a1f;
     padding:12px;
-    margin-bottom:10px;
+    margin-bottom:12px;
     border-radius:14px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.05);
+    box-shadow:0 6px 15px rgba(0,0,0,0.15);
 }
 
 .cart-count{
@@ -476,6 +477,17 @@ button:hover{
 .tab-btn{
     flex:0 0 auto;
 }
+
+.back-btn{
+    position:absolute;
+    top:20px;
+    left:20px;
+    margin:0;
+}    
+    
+#recipeDetailSection{
+    position:relative;
+}
     
 </style>
     
@@ -552,9 +564,10 @@ button:hover{
     <button onclick="showSection('homeSection')">← Kembali ke Home</button>
 </div>
     <div id="recipeDetailSection" class="section">
-    <button onclick="showSection('recipeSection')">⬅ Kembali</button>
-    <div id="recipeDetailContent"></div>
+    <button class="back-btn" onclick="showSection('recipeSection')">⬅ Kembali</button>
+    </div>
 </div>
+    
 
 <!-- KERANJANG -->
 <div id="cartSection" class="section">
@@ -718,11 +731,17 @@ function renderProducts(){
     products.forEach(p=>{
 
         container.innerHTML += `
-        <div class="product" onclick="showDetail(${p.id})">
+        <div class="product">
             <div class="stock-badge">Ready</div>
             <img src="${p.img}">
             <h4>${p.name}</h4>
             <p class="price">Rp ${p.price}</p>
+
+            <div class="qty-control">
+                <button onclick="changeQty(${p.id}, -1)">-</button>
+                <span>${cart[p.id] ? cart[p.id].qty : 0}</span>
+                <button onclick="changeQty(${p.id}, 1)">+</button>
+            </div>
         </div>
         `;
     });
@@ -765,12 +784,20 @@ function updateCart(){
 
         cartItems.innerHTML+=`
         <div class="cart-item">
-            <span>${item.name} x ${item.qty}</span>
-            <span>Rp ${subtotal}</span>
-            <button onclick="removeItem(${item.id})">X</button>
+        <div style="display:flex;align-items:center;gap:12px;">
+        <img src="${item.img}" style="width:50px;height:50px;object-fit:cover;border-radius:10px;">
+        <div>
+            <div style="font-weight:600;">${item.name}</div>
+            <div style="font-size:13px;">x ${item.qty}</div>
         </div>
-        `;
-    });
+    </div>
+
+    <div>
+        <div style="font-weight:600;">Rp ${subtotal}</div>
+        <button onclick="removeItem(${item.id})">X</button>
+    </div>
+</div>
+`;
 
     totalPrice.innerText=total;
     cartCount.innerText=totalItem;
@@ -870,15 +897,21 @@ function filterCategory(category, element){
         : products.filter(p=>p.category===category);
 
     filtered.forEach(p=>{
-        container.innerHTML+=`
-        <div class="product" onclick="showDetail(${p.id})">
-            <div class="stock-badge">Ready</div>
-            <img src="${p.img}">
-            <h4>${p.name}</h4>
-            <p class="price">Rp ${p.price}</p>
+    container.innerHTML+=`
+    <div class="product">
+        <div class="stock-badge">Ready</div>
+        <img src="${p.img}">
+        <h4>${p.name}</h4>
+        <p class="price">Rp ${p.price}</p>
+
+        <div class="qty-control">
+            <button onclick="changeQty(${p.id}, -1)">-</button>
+            <span>${cart[p.id] ? cart[p.id].qty : 0}</span>
+            <button onclick="changeQty(${p.id}, 1)">+</button>
         </div>
-        `;
-    });
+    </div>
+    `;
+});
 }
 
 function showRecipeDetail(id){
