@@ -892,14 +892,14 @@ function filterCategory(category, element){
 
     activeCategory = category;
 
-    document.querySelectorAll(".category-btn")
+    document.querySelectorAll(".tab-btn")
         .forEach(btn => btn.classList.remove("active"));
 
     element.classList.add("active");
 
     renderProducts();
 }
-
+    
 function showRecipeDetail(id){
 
     let recipe = recipes.find(r=>r.id===id);
