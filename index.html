@@ -418,61 +418,49 @@ button:hover{
     box-shadow:0 5px 15px rgba(200,167,78,0.4);
 }
 
-.home-menu{
-    display:flex;
-    flex-direction:column;
+.home-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
     gap:20px;
-    padding:30px;
+    padding:25px;
 }
 
 .menu-card{
     background:linear-gradient(135deg,var(--gold),var(--light-gold));
     color:var(--black);
-    padding:35px;
+    padding:40px 20px;
     border-radius:25px;
-    font-size:20px;
+    font-size:18px;
     font-weight:600;
     text-align:center;
     cursor:pointer;
-    box-shadow:0 10px 25px rgba(0,0,0,0.4);
     transition:0.3s;
+    box-shadow:0 10px 25px rgba(0,0,0,0.4);
 }
 
 .menu-card:hover{
-    transform:translateY(-6px);
+    transform:translateY(-5px);
+}
+
+.home-footnote{
+    margin-top:40px;
+    padding:20px;
+    background:rgba(255,255,255,0.05);
+    font-size:13px;
+    opacity:0.8;
 }
     
 </style>
     
 <body>
 
-<header>
+<header onclick="showSection('homeSection')" style="cursor:pointer;">
     <h3>Toko Mbah Dukun</h3>
-    <div class="cart-icon" onclick="showSection('cartSection')">
+    <div class="cart-icon" onclick="event.stopPropagation(); showSection('cartSection')">
         🛒
         <span class="cart-count" id="cartCount">0</span>
     </div>
-    
 </header>
-
-<!-- HOME -->
-<div id="homeSection" class="section">
-    <div class="home-menu">
-
-        <div class="menu-card" onclick="showSection('productSection')">
-            🌿 Bahan Herbal
-        </div>
-
-        <div class="menu-card" onclick="showSection('recipeSection')">
-            📜 Resep Jamu
-        </div>
-
-        <div class="menu-card" onclick="showSection('disclaimerSection')">
-            ⚠ Disclaimer
-        </div>
-
-    </div>
-</div>
 
 <!-- DISCLAIMER -->
 <div id="disclaimerSection" class="section">
@@ -484,11 +472,28 @@ button:hover{
             Website ini tidak mengambil data pengguna dan hanya dibuat untuk
             tujuan edukasi dan hiburan.
         </p>
+    </div>    
+
+<!-- HOME -->
+<div id="homeSection" class="section">
+    <div class="home-grid">
+
+        <div class="menu-card" onclick="showSection('productSection')">
+            🌿 Bahan Herbal
+        </div>
+
+        <div class="menu-card" onclick="showSection('recipeSection')">
+            📜 Resep Jamu
+        </div>
+
     </div>
 
-    <button onclick="showSection('homeSection')">
-        ← Kembali ke Home
-    </button>
+    <div class="home-footnote">
+        <hr>
+        <p>
+            * Tidak ada penyimpanan data, tracking, maupun pengumpulan informasi pribadi.
+        </p>
+    </div>
 </div>
     
 <!-- DETAIL PRODUK -->
@@ -519,8 +524,13 @@ button:hover{
  <!-- RESEP JAMU -->
 <div id="recipeSection" class="section">
     <h2>Resep Jamu Tradisional</h2>
-    <div id="recipeList"></div>
-</div>   
+    <div class="products" id="recipeList"></div>
+    <button onclick="showSection('homeSection')">← Kembali ke Home</button>
+</div>
+    <div id="recipeDetailSection" class="section">
+    <button onclick="showSection('recipeSection')">⬅ Kembali</button>
+    <div id="recipeDetailContent"></div>
+</div>
 
 <!-- KERANJANG -->
 <div id="cartSection" class="section">
@@ -574,14 +584,22 @@ button:hover{
 
 let recipes = [
     {
+        id:1,
         name:"Jamu Kunyit Asam",
-        desc:"Baik untuk daya tahan tubuh dan nyeri haid.",
-        source:"Diadaptasi dari buku Pengobatan Tradisional Jawa"
+        img:"images/kunyit.jpg",
+        khasiat:"Meningkatkan daya tahan tubuh dan meredakan nyeri haid.",
+        bahan:"Kunyit, asam jawa, gula merah, air.",
+        cara:"Rebus semua bahan selama 15 menit lalu saring.",
+        source:"Buku Pengobatan Tradisional Jawa"
     },
     {
+        id:2,
         name:"Beras Kencur",
-        desc:"Baik untuk pegal linu dan meningkatkan stamina.",
-        source:"Diadaptasi dari literatur jamu tradisional"
+        img:"images/kencur.jpg",
+        khasiat:"Mengurangi pegal linu dan meningkatkan stamina.",
+        bahan:"Beras, kencur, gula merah, air.",
+        cara:"Haluskan bahan lalu rebus dan saring.",
+        source:"Literatur jamu tradisional"
     }
 ];
     
@@ -805,14 +823,13 @@ function renderRecipes(){
 
     recipes.forEach(r=>{
         container.innerHTML+=`
-            <div class="product">
+            <div class="product" onclick="showRecipeDetail(${r.id})">
+                <img src="${r.img}">
                 <h4>${r.name}</h4>
-                <p>${r.desc}</p>
-                <small style="opacity:0.7;">${r.source}</small>
             </div>
         `;
     });
-}    
+}  
 
 renderRecipes();
 
@@ -841,6 +858,31 @@ function filterCategory(category, element){
         </div>
         `;
     });
+}
+
+function showRecipeDetail(id){
+
+    let recipe = recipes.find(r=>r.id===id);
+
+    let html = `
+        <img src="${recipe.img}" style="width:100%;max-width:300px;border-radius:20px;">
+        <h2>${recipe.name}</h2>
+
+        <h4>Khasiat</h4>
+        <p>${recipe.khasiat}</p>
+
+        <h4>Bahan</h4>
+        <p>${recipe.bahan}</p>
+
+        <h4>Cara Pembuatan</h4>
+        <p>${recipe.cara}</p>
+
+        <hr>
+        <small>Source: ${recipe.source}</small>
+    `;
+
+    document.getElementById("recipeDetailContent").innerHTML = html;
+    showSection("recipeDetailSection");
 }
     
 </script>
