@@ -487,15 +487,19 @@ button:hover{
     
 #recipeDetailSection{
     position:relative;
+    padding-top:70px;
 }
 
 .recipe-item{
     background:#1e261e;
     border:1px solid rgba(200,167,78,0.2);
-    padding:18px;
+    padding:22px;
     border-radius:18px;
     cursor:pointer;
     transition:0.25s;
+    text-align:center;
+    font-weight:600;
+    font-size:16px;
 }
 
 .recipe-item:hover{
@@ -909,18 +913,17 @@ function renderRecipes(){
     });
 }  
 
-renderRecipes();
+function renderRecipes(){
+    let container=document.getElementById("recipeList");
+    container.innerHTML="";
 
-function filterCategory(category, element){
-
-    activeCategory = category;
-
-    document.querySelectorAll(".tab-btn")
-        .forEach(btn => btn.classList.remove("active"));
-
-    element.classList.add("active");
-
-    renderProducts();
+    recipes.forEach(r=>{
+        container.innerHTML+=`
+            <div class="recipe-item" onclick="showRecipeDetail(${r.id})">
+                ${r.name}
+            </div>
+        `;
+    });
 }
     
 function showRecipeDetail(id){
