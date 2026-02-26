@@ -488,6 +488,27 @@ button:hover{
 #recipeDetailSection{
     position:relative;
 }
+
+.recipe-item{
+    background:#1e261e;
+    border:1px solid rgba(200,167,78,0.2);
+    padding:18px;
+    border-radius:18px;
+    cursor:pointer;
+    transition:0.25s;
+}
+
+.recipe-item:hover{
+    transform:translateY(-4px);
+    border:1px solid var(--gold);
+    box-shadow:0 8px 20px rgba(0,0,0,0.4);
+}
+
+#recipeList{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
     
 </style>
     
@@ -878,9 +899,11 @@ function renderRecipes(){
 
     recipes.forEach(r=>{
         container.innerHTML+=`
-            <div class="product" onclick="showRecipeDetail(${r.id})">
-                <img src="${r.img}">
+            <div class="recipe-item" onclick="showRecipeDetail(${r.id})">
                 <h4>${r.name}</h4>
+                <p style="font-size:13px; opacity:0.8;">
+                    ${r.khasiat}
+                </p>
             </div>
         `;
     });
@@ -905,21 +928,20 @@ function showRecipeDetail(id){
     let recipe = recipes.find(r=>r.id===id);
 
     let html = `
-        <img src="${recipe.img}" style="width:100%;max-width:300px;border-radius:20px;">
-        <h2>${recipe.name}</h2>
+    <h2>${recipe.name}</h2>
 
-        <h4>Khasiat</h4>
-        <p>${recipe.khasiat}</p>
+    <h4>Khasiat</h4>
+    <p>${recipe.khasiat}</p>
 
-        <h4>Bahan</h4>
-        <p>${recipe.bahan}</p>
+    <h4>Bahan</h4>
+    <p>${recipe.bahan}</p>
 
-        <h4>Cara Pembuatan</h4>
-        <p>${recipe.cara}</p>
+    <h4>Cara Pembuatan</h4>
+    <p>${recipe.cara}</p>
 
-        <hr>
-        <small>Source: ${recipe.source}</small>
-    `;
+    <hr>
+    <small>Source: ${recipe.source}</small>
+`;
 
     document.getElementById("recipeDetailContent").innerHTML = html;
     showSection("recipeDetailSection");
