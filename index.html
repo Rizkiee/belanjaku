@@ -618,10 +618,13 @@ button:hover{
     <h3>Total: Rp <span id="totalPrice">0</span></h3>
     
     <div class="cart-buttons">
-    <button onclick="showSection('checkoutSection')">Checkout</button>
-    <button onclick="showSection('productSection')">← Kembali Belanja</button>
-    <button id="checkoutBtn" onclick="showSection('checkoutSection')">Checkout</button>
-    </div>
+    <button id="checkoutBtn" onclick="showSection('checkoutSection')">
+        Checkout
+    </button>
+
+    <button onclick="showSection('productSection')">
+        ← Kembali Belanja
+    </button>
 </div>
     
 <!-- CHECKOUT -->
@@ -750,6 +753,20 @@ function addFromDetail(id){
 let cart = {};
     
 let activeCategory = "all";
+    function filterCategory(category, el){
+
+    activeCategory = category;
+
+    // hapus active dari semua tombol
+    document.querySelectorAll(".tab-btn").forEach(btn=>{
+        btn.classList.remove("active");
+    });
+
+    // tambahkan active ke tombol yang diklik
+    el.classList.add("active");
+
+    renderProducts();
+}
 
 function showSection(sectionId) {
     document.querySelectorAll(".section").forEach(sec => {
