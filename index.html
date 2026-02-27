@@ -182,17 +182,16 @@ button:hover{
     cursor:pointer;
 }
 
-/* hanya tombol biasa yang rata tengah */
-.section > button{
-    display:block;
-    margin:12px auto;
-}
-
 /* KECUALI tombol kembali di detail */
 #detailSection > button{
     margin:0;
 }
 
+.section .back-home-btn{
+    display:block;
+    margin:20px auto;
+}    
+    
 #checkoutSection{
     text-align:center;
 }
@@ -595,8 +594,8 @@ button:hover{
 
     <div class="products" id="productList"></div>
 
-    <button onclick="showSection('homeSection')">
-        ← Kembali ke Home
+    <button class="back-home-btn" onclick="showSection('homeSection')">
+    ← Kembali ke Home
     </button>
 </div>
 
@@ -621,6 +620,7 @@ button:hover{
     <div class="cart-buttons">
     <button onclick="showSection('checkoutSection')">Checkout</button>
     <button onclick="showSection('productSection')">← Kembali Belanja</button>
+    <button id="checkoutBtn" onclick="showSection('checkoutSection')">Checkout</button>
     </div>
 </div>
     
@@ -852,7 +852,13 @@ function updateCart(){
     totalPrice.innerText=total;
     cartCount.innerText=totalItem;
 
-    renderProducts();
+    if(totalItem === 0){
+    document.getElementById("checkoutBtn").style.display="none";
+    }else{
+    document.getElementById("checkoutBtn").style.display="inline-block";
+}
+
+renderProducts();
 }
 
 function processPayment(){
@@ -913,23 +919,7 @@ function showToast(message){
     setTimeout(()=>{
         toast.classList.remove("show");
     },2000);
-}
-
-function renderRecipes(){
-    let container=document.getElementById("recipeList");
-    container.innerHTML="";
-
-    recipes.forEach(r=>{
-        container.innerHTML+=`
-            <div class="recipe-item" onclick="showRecipeDetail(${r.id})">
-                <h4>${r.name}</h4>
-                <p style="font-size:13px; opacity:0.8;">
-                    ${r.khasiat}
-                </p>
-            </div>
-        `;
-    });
-}  
+} 
 
 function renderRecipes(){
     let container=document.getElementById("recipeList");
