@@ -193,25 +193,79 @@ button:hover{
 }    
     
 #checkoutSection{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:80vh;
+}
+
+.checkout-card{
+    background:var(--cream);
+    color:var(--black);
+    padding:35px;
+    border-radius:25px;
+    border:2px solid var(--gold);
+    box-shadow:0 15px 35px rgba(0,0,0,0.4);
+    width:100%;
+    max-width:420px;
+    animation:fadeSlide 0.4s ease;
+}
+
+.checkout-card h2{
     text-align:center;
+    margin-bottom:5px;
+    color:var(--black);
+}
+
+.checkout-subtitle{
+    text-align:center;
+    font-size:13px;
+    margin-bottom:25px;
+    opacity:0.7;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+    margin-bottom:18px;
+}
+
+.form-group label{
+    font-size:13px;
+    margin-bottom:6px;
+    font-weight:600;
 }
 
 #checkoutSection input{
-    width:100%;
-    max-width:320px;
+    background:white;
+    border:1px solid #ddd;
     padding:12px 14px;
     border-radius:12px;
-    border:1px solid #c8e6c9;
-    outline:none;
-    font-family:'Poppins',sans-serif;
     font-size:14px;
     transition:0.2s;
-    box-shadow:0 4px 10px rgba(0,0,0,0.04);
 }
 
 #checkoutSection input:focus{
-    border-color:#66bb6a;
-    box-shadow:0 0 0 3px rgba(102,187,106,0.15);
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(200,167,78,0.2);
+}
+
+.primary-btn{
+    background:linear-gradient(135deg,var(--gold),var(--light-gold));
+    color:var(--black);
+    font-weight:600;
+    width:100%;
+}
+
+.secondary-btn{
+    background:#e8e8e8;
+    color:#444;
+    box-shadow:none;
+    width:100%;
+}
+
+.secondary-btn:hover{
+    background:#dcdcdc;
 }
 
 .form-group{
@@ -630,25 +684,39 @@ button:hover{
     
 <!-- CHECKOUT -->
 <div id="checkoutSection" class="section">
-    <h2>Data Pembeli</h2>
-    <div class="form-group">
-    <input id="nama" placeholder="Nama">
-</div>
-<div class="form-group">
-    <input id="alamat" placeholder="Alamat">
-</div>
-<div class="form-group">
-    <input id="nohp" placeholder="No HP">
-</div>
-<div class="checkout-buttons">
-    <button onclick="processPayment()" class="primary-btn">
-        Bayar Sekarang
-    </button>
+    <div class="checkout-card">
 
-    <button onclick="showSection('cartSection')" class="secondary-btn">
-        ← Kembali ke Keranjang
-    </button>
-</div>
+        <h2>🧾 Data Pembeli</h2>
+        <p class="checkout-subtitle">
+            Silakan isi data dengan benar sebelum melakukan pembayaran
+        </p>
+
+        <div class="form-group">
+            <label>Nama Lengkap</label>
+            <input id="nama" placeholder="Masukkan nama lengkap">
+        </div>
+
+        <div class="form-group">
+            <label>Alamat</label>
+            <input id="alamat" placeholder="Masukkan alamat lengkap">
+        </div>
+
+        <div class="form-group">
+            <label>No Handphone</label>
+            <input id="nohp" placeholder="08xxxxxxxxxx">
+        </div>
+
+        <div class="checkout-buttons">
+            <button onclick="processPayment()" class="primary-btn">
+                💳 Bayar Sekarang
+            </button>
+
+            <button onclick="showSection('cartSection')" class="secondary-btn">
+                ← Kembali ke Keranjang
+            </button>
+        </div>
+
+    </div>
 </div>
     
 <!-- INVOICE -->
